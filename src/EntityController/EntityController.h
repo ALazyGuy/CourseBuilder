@@ -6,6 +6,7 @@
 class EntityController{
 private:
 	std::string name;
+	int size;
 	std::map<std::string, std::string> fields;
 
 public:
