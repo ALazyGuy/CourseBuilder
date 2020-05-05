@@ -51,3 +51,11 @@ void EntityController::write(std::string directory){
 
 	headerOut << "};";
 }
+
+std::map<std::string, std::string> EntityController::getFields(){
+	return fields;
+}
+
+int EntityController::getSize(){
+	return size;
+}

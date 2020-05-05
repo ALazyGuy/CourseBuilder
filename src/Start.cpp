@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "EntityController/EntityController.h"
+#include "FilesController/FilesController.h"
 #include "ListController/ListController.h"
 #include "MenuController/MenuController.h"
 
@@ -15,7 +15,7 @@ std::string mainCode = "";
 std::string variables = "";
 std::string preMain = "";
 
-bool menuDone = false, typeDone = false, vectorType = false, listDone = false, entityDone = false;
+bool menuDone = false, typeDone = false, vectorType = false, listDone = false, entityDone = false, filesDone = false;
 
 void configureType(EntityController* ec){
 	if(!entityDone) return;
@@ -77,6 +77,24 @@ ListController* configureList(){
 	return lc;
 }
 
+FilesController* configureFiles(EntityController* ec){
+	std::cout << "Use files to save data(1 - y, 0 - n): ";
+	int ans;
+	std::cin >> ans;
+	if(ans == 0){
+		filesDone = true;
+		return new FilesController("");
+	}
+	std::string filename;
+	std::cout << "Enter file name to save data: ";
+	std::cin.ignore();
+	std::getline(std::cin, filename);
+	FilesController* fc = new FilesController(filename);
+	preMain += fc->getLoadSaveFunctions(ec);
+	startIncludes += "#include <fstream>\n";
+	filesDone = true;
+}
+
 void build(){
 	std::ofstream out(DIR + std::string("Start.cpp"));
 	out << startIncludes << std::endl << START << variables << preMain;
@@ -92,6 +110,7 @@ int main(){
 	EntityController* ec = new EntityController();
 	ListController* lc = nullptr;
 	MenuController* mc = new MenuController();
+	FilesController* fc;
 
 	int hasAdmin;
 	std::cout << "Add admin/user version(1 - y, 0 - n): ";
@@ -117,6 +136,7 @@ int main(){
 		std::cout << (menuDone ? "" : "* ") << idCounter++ << ") Configure menu" << std::endl;
 		std::cout << (typeDone ? "" : "* ") << idCounter++ << ") Configure type" << std::endl;
 		std::cout << (entityDone ? "" : "* ") << idCounter++ << ") Configure entity" << std::endl;
+		std::cout << (filesDone ? "" : "* ") << idCounter++ << ") Configure file" << std::endl;
 		if(typeDone && !vectorType) std::cout << (listDone ? "" : "* ") << idCounter++ << ") Configure list" << std::endl;
 		if(menuDone && typeDone && listDone && entityDone) std::cout << idCounter++ << ") Build" << std::endl;
 		std::cout << "Enter item number: ";
@@ -126,7 +146,8 @@ int main(){
 		case 2: configureMenu(mc); break;
 		case 3: configureType(ec); break;
 		case 4: configureEntities(ec); break;
-		case 5:{
+		case 5: fc = configureFiles(ec); break;
+		case 6:{
 			if(typeDone && !vectorType){
 				lc = configureList();
 			}else{
@@ -135,7 +156,7 @@ int main(){
 			}
 			break;
 		}
-		case 6:{
+		case 7:{
 			build();
 			return 0;
 		}

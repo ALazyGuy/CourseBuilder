@@ -11,7 +11,9 @@ private:
 
 public:
 	void init(std::string);
+	std::map<std::string, std::string> getFields();
 	std::string getName();
+	int getSize();
 	void registerField(std::string, std::string);
 	void write(std::string);
 };
