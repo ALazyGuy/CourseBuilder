@@ -10,6 +10,6 @@ private:
 
 public:
 	void registerItem(std::string, std::string, bool);
-	std::string generateAsk();
+	std::string generateAsk(int);
 	std::string generateMethods();
 };

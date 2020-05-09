@@ -50,7 +50,7 @@ void configureEntities(EntityController *entityController){
 	entityDone = true;
 }
 
-void configureMenu(MenuController* mc){
+void configureMenu(MenuController* mc, int admin){
 	if(menuDone) return;
 	menuDone = true;
 	while(true){
@@ -67,7 +67,7 @@ void configureMenu(MenuController* mc){
 		mc->registerItem(name, id, isAdmin);
 	}
 	preMain += mc->generateMethods();
-	mainCode += mc->generateAsk();
+	mainCode += mc->generateAsk(admin);
 }
 
 ListController* configureList(){
@@ -138,12 +138,12 @@ int main(){
 		std::cout << (entityDone ? "" : "* ") << idCounter++ << ") Configure entity" << std::endl;
 		std::cout << (filesDone ? "" : "* ") << idCounter++ << ") Configure file" << std::endl;
 		if(typeDone && !vectorType) std::cout << (listDone ? "" : "* ") << idCounter++ << ") Configure list" << std::endl;
-		if(menuDone && typeDone && listDone && entityDone) std::cout << idCounter++ << ") Build" << std::endl;
+		if(menuDone && typeDone && listDone && entityDone && filesDone) std::cout << idCounter++ << ") Build" << std::endl;
 		std::cout << "Enter item number: ";
 		std::getline(std::cin, choise);
 		switch(std::atoi(choise.c_str())){
 		case 1: return 0;
-		case 2: configureMenu(mc); break;
+		case 2: configureMenu(mc, hasAdmin); break;
 		case 3: configureType(ec); break;
 		case 4: configureEntities(ec); break;
 		case 5: fc = configureFiles(ec); break;

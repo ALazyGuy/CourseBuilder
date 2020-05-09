@@ -6,12 +6,12 @@ void MenuController::registerItem(std::string msg, std::string id,  bool isAdmin
 	IDs[msg] = id;
 }
 
-std::string MenuController::generateAsk(){
-	std::string result = "\tint choice = -1;\n\twhile(true){\n\t\tcout << \"Item's for admin only marked with $\" << endl;\n";
+std::string MenuController::generateAsk(int admin){
+	std::string result = "\tint choice = -1;\n\twhile(true){\n" + (admin == 1 ? std::string("\t\tcout << \"Item's for admin only marked with $\" << endl;\n") : std::string(""));
 	int d = 1;
 
 	for(std::map<std::string, bool>::iterator it = items.begin(); it != items.end(); it++){
-		result += "\t\tcout << \"" + (it->second ? std::string("$ ") : std::string("  ")) + std::to_string(d++) + ")" + it->first + "\" << endl;\n";
+		result += "\t\tcout << \"" + (admin == 1 ? (it->second ? std::string("$ ") : std::string("  ")) : std::string("")) + std::to_string(d++) + ")" + it->first + "\" << endl;\n";
 	}
 
 	d = 1;
